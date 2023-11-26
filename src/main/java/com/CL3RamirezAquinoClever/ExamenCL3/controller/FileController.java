@@ -1,9 +1,6 @@
 package com.CL3RamirezAquinoClever.ExamenCL3.controller;
 
-import com.CL3RamirezAquinoClever.ExamenCL3.model.response.ResponseFile;
-import com.CL3RamirezAquinoClever.ExamenCL3.service.FileService;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,18 +12,20 @@ import java.io.IOException;
 public class FileController {
     private static final String IMAGES_DIRECTORY = "images";
     private static final String DOCUMENTS_DIRECTORY = "documents";
-    private static final long MAX_FILE_SIZE = 1_500_000; // 1.5MB
-
+    private static final long MAX_FILE_EXCEL_SIZE = 1572864;
+    private static final long MAX_FILE_IMG_SIZE = 1048576;
+    
     @PostMapping("/filesimages")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
         validateFileExtension(file, "png");
+        validateFileSize(file, MAX_FILE_IMG_SIZE);
         return saveFile(file, IMAGES_DIRECTORY);
     }
 
     @PostMapping("/filesexcel")
     public ResponseEntity<String> uploadExcelFile(@RequestParam("file") MultipartFile file) throws IOException {
         validateFileExtension(file, "xlsx");
-        validateFileSize(file, MAX_FILE_SIZE);
+        validateFileSize(file, MAX_FILE_EXCEL_SIZE);
         return saveFile(file, DOCUMENTS_DIRECTORY);
     }
 
